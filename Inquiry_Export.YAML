@@ -1,0 +1,308 @@
+openapi: 3.0.3
+info:
+  title: Data Retrieval API
+  version: 1.0.0
+  #description: |
+    #The **Data Retrieval API** authenticates users, retrieves unprocessed email data from the database,
+    #matches it with stored JSON, and returns matched data in JSON format.
+    #---
+    
+  contact:
+    name: Freightoscope Support
+    email: support@freightoscope.com
+
+
+servers:
+  - url: https://test.freightoscope.com
+    description: Test Server
+  - url: https://app.freightoscope.com
+    description: Production Server
+  
+
+
+paths:
+  /AIEmailData:
+    get:
+      summary: Retrieve processed Email data
+      description: Fetches the most recent unprocessed email data.
+      parameters:
+        - name: userName
+          in: query
+          required: true
+          description: Username for authentication.
+          schema:
+            type: string
+          example: "AI Demo"
+        - name: Password
+          in: query
+          required: true
+          description: Password for authentication.
+          schema:
+            type: string
+          example: "FOS@2024"
+        #- name: 
+          #in: query
+          #required: false
+          #description: |
+            #Optional  threshold (0–100).  
+            #- `0` → includes  values in response.  
+            #- `1` → excludes  values.
+          #schema:
+            #type: integer
+          #example: 0
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              example:
+                #With  Fields:
+                  #summary: Response when  = 0
+                  #value:
+                    #Message: "Success"
+                    #Data:
+                      #- Items:
+                       #   - code: "Gen"
+                        #    name: "general cargo"
+                         #   qty: "5"
+                          #  unit_weight: "kg"
+                           # weight: "220"
+                            #weight_uom: "kg"
+                            #length: "10"
+                            #width: "20"
+                            #height: "30"
+                            #size_uom: "cm"
+                            #: "50"
+                        #Containers: []
+                        #mode: "Air"
+                        #mode_: 50
+                        #type: ""
+                        #type_: 100
+                        #commodity: "general cargo"
+                        #commodity_: 100
+                        #origin: "BOM (Chhatrapati Shivaji, Mumbai) India"
+                        #origin_: 100
+                        #origin_port_or_door: "port"
+                        #destination: "LCT (London City Airport) United Kingdom"
+                        #destination_: 100
+                        #destination_port_or_door: "port"
+                        #container_size: null
+                        #container_size_: 0
+                        #inco_term: null
+                        #inco_term_: 0
+                        #pickup_address: null
+                        #pickup_address_: 0
+                        #delivery_address: null
+                        #delivery_address_: 0
+                        #total_weight: 220
+                        #total_weight_: 60
+                        #weight_uom: "kg"
+                        #weight_uom_: 60
+                        #cbm: null
+                        #cbm_: 100
+                        #departure_date: null
+                        #departure_date_: 60
+                        #arrival_date: null
+                        #arrival_date_: 60
+                        #OriginalEmail: "Dhummas Mehta Product Director Email: dhummas@freightoscope.com T: + 91 9820795150 https://www.freightoscope.com From: SMITH Pam \u003Cpam.smith@bostik.com\u003ESent: Tuesday, July 23, 2024 8:22 AMTo: Maureen Bond \u003Cmaureenb@360lg.co.nz\u003ESubject: QUOTE FOR LCL 8 PALLETS FROM BENELUX, THE NETHERLANDS TO AUCKLAND - PO'S 4501235903 AND 4501228250 - EX WORKSHi,Please send me rates for Mumbai to London for 5 pcs 220 kg general cargo"
+                        #IsPartial: false
+                        #PartialReason: null
+                #Without  Fields:
+                  #summary: Response when  = 1
+                  #value:
+                    Message: "Success"
+                    Data:
+                      - Items:
+                          - code: "Gen"
+                            name: "general cargo"
+                            qty: "5"
+                            unit_weight: "kg"
+                            weight: "220"
+                            weight_uom: "kg"
+                            length: "10"
+                            width: "20"
+                            height: "30"
+                            size_uom: "cm"
+                        Containers: []
+                        mode: "Air"
+                        type: ""
+                        commodity: "general cargo"
+                        origin: "BOM (Chhatrapati Shivaji, Mumbai) India"
+                        origin_port_or_door: "port"
+                        destination: "LCT (London City Airport) United Kingdom"
+                        destination_port_or_door: "port"
+                        container_size: null
+                        inco_term: null
+                        pickup_address: null
+                        delivery_address: null
+                        total_weight: 220
+                        weight_uom: "kg"
+                        cbm: null
+                        departure_date: null
+                        arrival_date: null
+                        OriginalEmail: "Dhummas Mehta Product Director Email: dhummas@freightoscope.com T: + 91 9820795150 https://www.freightoscope.com From: SMITH Pam <pam.smith@bostik.com>Sent: Tuesday, July 23, 2024 8:22 AMTo: Maureen Bond <maureenb@360lg.co.nz>Subject: QUOTE FOR LCL 8 PALLETS FROM BENELUX, THE NETHERLANDS TO AUCKLAND - PO'S 4501235903 AND 4501228250 - EX WORKSHi,Please send me rates for Mumbai to London for 5 pcs 220 kg general cargo"
+                        IsPartial: false
+                        PartialReason: null
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+        "401":
+          description: Invalid credentials.
+          content:
+            application/json:
+              example:
+                status: error
+                message: Invalid credentials
+
+        "403":
+          description: Unauthorized company.
+          content:
+            application/json:
+              example:
+                status: error
+                message: Unauthorized company
+
+        "404":
+          description: No data found.
+          content:
+            application/json:
+              example:
+                status: error
+                message: No matching unprocessed data found
+
+        "500":
+          description: Internal server error.
+          content:
+            application/json:
+              example:
+                status: error
+                message: Internal server error
+
+components:
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        Message:
+          type: string
+          description: Response status message.
+          example: "Success"
+        Data:
+          type: array
+          description: List of parsed email Data records.
+          items:
+            type: object
+            properties:
+              Items:
+                type: array
+                description: List of items parsed from the email.
+                items:
+                  type: object
+                  properties:
+                    code:
+                      type: string
+                      description: Unique code for each API response.
+                    name:
+                      type: string
+                      description: Full commodity name as parsed from the email.
+                    qty:
+                      type: string
+                      description: Quantity of packages or pieces.
+                    unit_weight:
+                      type: string
+                      description: Unit of weight for individual items.
+                    weight:
+                      type: string
+                      description: Total weight of the shipment item(s).
+                    weight_uom:
+                      type: string
+                      description: Unit of measurement for weight (e.g., kg).
+                    length:
+                      type: string
+                      description: Length dimension of cargo.
+                    width:
+                      type: string
+                      description: Width dimension of cargo.
+                    height:
+                      type: string
+                      description: Height dimension of cargo.
+                    size_uom:
+                      type: string
+                      description: Unit of measurement for size (e.g., cm).
+                    #confidence:
+                      #type: string
+                      #description: AI confidence percentage for accuracy of extracted item data.
+              Containers:
+                type: array
+                description: List of containers, if applicable.
+                items:
+                  type: object
+              mode:
+                type: string
+                description: Mode of transportation (e.g., Air, Sea, Road).
+              #mode_confidence:
+                #type: integer
+                #description: Confidence level for mode extraction.
+              type:
+                type: string
+                description: Type of shipment or cargo.
+              #type_confidence:
+                #type: integer
+                #description: Confidence level for type detection.
+              commodity:
+                type: string
+                description: Description of the cargo/commodity being transported.
+              #commodity_confidence:
+                #type: integer
+                #description: Confidence level for commodity detection.
+              origin:
+                type: string
+                description: Origin airport, seaport, or location.
+              #origin_confidence:
+                #type: integer
+                #description: Confidence level for origin extraction.
+              destination:
+                type: string
+                description: Destination airport, seaport, or location.
+              #destination_confidence:
+                #type: integer
+                #description: Confidence level for destination extraction.
+              inco_term:
+                type: string
+                description: Incoterm used for the shipment.
+              pickup_address:
+                type: string
+                description: Pickup location address, if available.
+              delivery_address:
+                type: string
+                description: Delivery address for the shipment.
+              total_weight:
+                type: number
+                description: Total weight for the entire shipment.
+              cbm:
+                type: string
+                description: Cubic meter volume of shipment, if available.
+              departure_date:
+                type: string
+                description: Estimated or actual departure date.
+              arrival_date:
+                type: string
+                description: Estimated or actual arrival date.
+              OriginalEmail:
+                type: string
+                description: Full original email text used for AI extraction.
+              IsPartial:
+                type: boolean
+                description: Indicates whether data returned is partial.
+              PartialReason:
+                type: string
+                description: Reason for partial data (if IsPartial = true).
+
+
+
+
+
+
+
+
+
