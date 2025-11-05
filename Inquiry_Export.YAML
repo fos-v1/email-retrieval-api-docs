@@ -26,20 +26,20 @@ paths:
       summary: Retrieve processed Email data
       description: Fetches the most recent unprocessed email data.
       parameters:
-        - name: userName
-          in: query
-          required: true
-          description: Username for authentication.
-          schema:
-            type: string
-          example: "AI Demo"
-        - name: Password
-          in: query
-          required: true
-          description: Password for authentication.
-          schema:
-            type: string
-          example: "FOS@2024"
+        #- name: userName
+          #in: query
+          #required: true
+          #description: Username for authentication.
+          #schema:
+            #type: string
+          #example: "AI Demo"
+        #- name: Password
+          #in: query
+          #required: true
+          #description: Password for authentication.
+          #schema:
+            #type: string
+          #example: "FOS@2024"
         #- name: 
           #in: query
           #required: false
@@ -297,6 +297,7 @@ components:
               PartialReason:
                 type: string
                 description: Reason for partial data (if IsPartial = true).
+
 
 
 
